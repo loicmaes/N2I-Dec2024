@@ -1,4 +1,3 @@
-import { useStorage } from "@vueuse/core";
 import type {
   EQuestionType,
   IBeNearestQuestion,
@@ -8,7 +7,7 @@ import type {
   ITextQuestion,
 } from "~/types/questions";
 
-export const useQuestionConfig = () => useState<IQuestion[]>("questionConfig", () => (JSON.parse(localStorage.getItem("questionConfig") ?? "")));
+export const useQuestionConfig = () => useState<IQuestion[]>("questionConfig", () => (JSON.parse(localStorage.getItem("questionConfig") ?? "[]")));
 
 export function loadJson(data: string) {
   useQuestionConfig().value = JSON.parse(data);
