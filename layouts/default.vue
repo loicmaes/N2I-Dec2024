@@ -80,7 +80,7 @@ import { Gamepad, Github } from "@iconoir/vue";
               as-child
             >
               <NuxtLink
-                to=""
+                to="https://github.com/Xen0Xys/N2I-2024-API"
                 target="_blank"
               >
                 <Github />

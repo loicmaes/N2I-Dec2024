@@ -6,6 +6,7 @@ import type {
   IQuestion,
   ITextQuestion,
 } from "~/types/questions";
+import { useToast } from "~/components/ui/toast";
 
 export const useQuestionConfig = () => useState<IQuestion[]>("questionConfig", () => (JSON.parse(localStorage.getItem("questionConfig") ?? "[]")));
 
@@ -14,10 +15,19 @@ export function loadJson(data: string) {
 
   useQuestionConfig().value = json;
   localStorage.setItem("questionConfig", JSON.stringify(json));
+
+  useToast().toast({
+    title: "✅ Données chargées !",
+    description: "Les données ont été chargées dans votre interface et la sauvegarde a été initialisée ! Bonne configuration.",
+  });
 }
 
 export function save() {
   localStorage.setItem("questionConfig", JSON.stringify(useQuestionConfig().value));
+  useToast().toast({
+    title: "✅ Données sauvegardées !",
+    description: "Une trace a été sauvegardée ! N'oubliez pas de télécharger l'archive afin de ne pas perdre une trace de modification.",
+  });
 }
 export function download() {
   useJsonDownload(useQuestionConfig().value);
@@ -48,6 +58,7 @@ export function addQuestion(type: EQuestionType) {
     question: "",
     specific: buildQuestion(type),
   }];
+  save();
 }
 export function findQuestion(id: number): IQuestion | undefined {
   return useQuestionConfig().value.find(question => question.id === id);
@@ -60,6 +71,7 @@ export function deleteQuestion(id: number) {
     question.id = index + 1;
     return question;
   })];
+  save();
 }
 
 function buildQuestion(type: EQuestionType): IMediaQuestion | ITextQuestion | IBeNearestQuestion | IFillEmptySpacesQuestion {
