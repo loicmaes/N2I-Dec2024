@@ -86,7 +86,7 @@ const stepIndex = ref<number>(getStepIndex());
       <span class="block h-0.5 w-1/2 mx-auto bg-gradient-to-r from-transparent via-foreground/15 to-transparent" />
 
       <div
-        class="grid grid-cols-3 gap-2"
+        class="flex items-start gap-2"
       >
         <div
           v-for="(group, index) in images"
