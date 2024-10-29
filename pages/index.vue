@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { Gamepad, Medal, MediaImage, Check, Circle } from "@iconoir/vue";
+import { Gamepad, Medal, MediaImage, Check, Circle, Eye } from "@iconoir/vue";
 import { stringifyDate } from "~/lib/dates";
+import steps from "~/assets/fakeData/nightSteps";
+import team from "~/assets/fakeData/team";
+import quotes from "~/assets/fakeData/quotes";
+import images from "~/assets/fakeData/images";
 
 useHead({
   title: "A2CM - Édition 2024",
@@ -26,9 +30,9 @@ const stepIndex = ref<number>(getStepIndex());
   >
     <section
       data-section="hero"
-      class="min-h-dvh flex items-center gap-4"
+      class="min-h-dvh flex items-stretch gap-4 py-32"
     >
-      <header class="flex flex-col items-start gap-6 basis-1/2">
+      <header class="flex flex-col items-start justify-center gap-6 basis-1/2">
         <div class="-mb-4 flex items-center gap-2 text-sm text-primary">
           <Medal />
           <NuxtLink
@@ -44,18 +48,104 @@ const stepIndex = ref<number>(getStepIndex());
         <p class="max-w-[55ch] text-muted-foreground leading-relaxed">
           Ce défi créatif s'est déroulé du coucher au lever du soleil, laissant aux participants une seule nuit pour concevoir un jeu web à la fois captivant et porteur de sens. Ici, découvrez le fruit de cette aventure : un jeu pensé pour instruire, sensibiliser et divertir, né de la passion de l'imagination de développeurs et créatifs unis par le défi d'une nuit.
         </p>
-        <Button
-          as-child
-          class="gap-2 mt-8"
-        >
-          <NuxtLink to="/game">
-            <Gamepad />
-            <span>Jouons un peu</span>
-          </NuxtLink>
-        </Button>
+        <div class="flex items-center gap-2 mt-8">
+          <Button
+            as-child
+            class="gap-2"
+          >
+            <NuxtLink to="/game">
+              <Gamepad />
+              <span>Jouons un peu</span>
+            </NuxtLink>
+          </Button>
+          <Button
+            variant="outline"
+            as-child
+            class="gap-2"
+          >
+            <NuxtLink to="/game">
+              <Eye />
+              <span>Explorons le concept</span>
+            </NuxtLink>
+          </Button>
+        </div>
       </header>
-      <div class="min-h-dvh basis-1/2 bg-primary/10 grid place-items-center">
+      <div class="basis-1/2 bg-primary/10 grid place-items-center rounded-xl">
         <MediaImage class="h-24 w-24 text-primary opacity-25" />
+      </div>
+    </section>
+
+    <section
+      data-section="galery"
+      class="flex flex-col gap-10 py-32"
+    >
+      <h2 class="text-4xl font-extrabold text-center">
+        Nos souvenirs
+      </h2>
+
+      <span class="block h-0.5 w-1/2 mx-auto bg-gradient-to-r from-transparent via-foreground/15 to-transparent" />
+
+      <div
+        class="grid grid-cols-3 gap-2"
+      >
+        <div
+          v-for="(group, index) in images"
+          :key="`group-${index}`"
+          class="flex flex-col gap-2"
+        >
+          <NuxtImg
+            v-for="image in group"
+            :key="image"
+            :src="image"
+            :placeholder="[50, 25, 75, 5]"
+            class="rounded-md"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section
+      data-section="quotes"
+      class="flex flex-col gap-10 pt-24 pb-16 rounded-xl bg-primary text-primary-foreground"
+    >
+      <h2 class="text-4xl font-extrabold text-center">
+        Les délires de la nuit
+      </h2>
+
+      <span class="block h-0.5 bg-gradient-to-l from-transparent via-primary-foreground/25 to-transparent w-1/2 mx-auto" />
+
+      <div class="grid grid-cols-3 gap-6 px-16">
+        <Card
+          v-for="quote in quotes"
+          :key="JSON.stringify(quote)"
+          class="bg-background/10 text-foreground-primary border-primary-foreground/25"
+        >
+          <CardHeader class="flex-row items-center gap-4">
+            <Avatar>
+              <AvatarImage
+                v-if="team[quote.author].avatar"
+                :src="team[quote.author].avatar ?? ''"
+              />
+              <AvatarFallback>{{ team[quote.author].name.split(" ").map(part => part.substring(0, 1)).join("") }}</AvatarFallback>
+            </Avatar>
+            <div class="flex flex-col">
+              <p class="text-lg font-bold leading-tight">
+                {{ team[quote.author].name }}
+              </p>
+              <span class="text-sm opacity-60">{{ team[quote.author].role }}</span>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p class="text-lg italic font-semibold leading-tight">
+              "{{ quote.content }}"
+            </p>
+          </CardContent>
+          <CardFooter class="justify-end">
+            <p class="text-xs opacity-40">
+              {{ stringifyDate(quote.time) }}
+            </p>
+          </CardFooter>
+        </Card>
       </div>
     </section>
 
