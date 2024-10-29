@@ -6,31 +6,13 @@ useHead({
   title: "A2CM - Édition 2024",
 });
 
-type Step = {
-  step: number;
-  time: Date;
-  title: string;
-  description: string;
-};
-const steps: Step[] = [
-  {
-    step: 1,
-    time: new Date("Dec, 5 2024 16:39"),
-    title: "Début de la nuit",
-    description: "Les organisateurs présentent l'événement et distribuent les sujets. Après quoi les participants prennent le temps de découvrir les défis proposés pour la nuit et de choisir les 5 défis en plus de celui de la nuit qu'ils souhaitent essayer de relever au mieux.",
-  },
-  {
-    step: 2,
-    time: new Date("Dec, 6 2024 8:04"),
-    title: "Fin de la nuit",
-    description: "Si les livrables n'ont pas été rendus : trop tard. L'horloge a sonné la fin de la nuit, il est l'heure de reprendre nos vies comme si cette nuit n'avait été qu'une autre nuit passionnée à travailler sur un projet passionnant.",
-  },
-];
 const getStepIndex = (): number => {
   const now = Date.now();
   let step = 0;
-  if (now >= new Date("Dec, 5 2024 16:39").getTime()) step = 1;
-  console.log(new Date("Dec, 5 2024 16:39"));
+
+  for (const _step of steps)
+    if (_step.time.getTime() <= now && _step.step > step)
+      step = _step.step;
 
   return step;
 };
@@ -79,13 +61,16 @@ const stepIndex = ref<number>(getStepIndex());
 
     <section
       data-section="details"
-      class="flex flex-col gap-6 py-32"
+      class="flex flex-col gap-10 py-24"
     >
       <h2 class="text-4xl font-extrabold text-center">
         Détails de la nuit
       </h2>
+
+      <span class="block h-0.5 w-1/2 mx-auto bg-gradient-to-r from-transparent via-foreground/15 to-transparent" />
+
       <div class="flex gap-12">
-        <div class="grid place-items-center basis-1/2 bg-primary/10">
+        <div class="grid place-items-center basis-1/2 bg-primary/10 rounded-xl">
           <MediaImage class="text-primary opacity-25 h-20 w-20" />
         </div>
         <div class="basis-1/2 py-6">
