@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Gamepad } from "@iconoir/vue";
+import { Gamepad, Github } from "@iconoir/vue";
 </script>
 
 <template>
@@ -54,5 +54,42 @@ import { Gamepad } from "@iconoir/vue";
     <main class="flex-1 flex flex-col">
       <slot />
     </main>
+
+    <footer class="py-4">
+      <Card class="w-full">
+        <CardContent class="flex items-center justify-between py-4 px-6">
+          <p>Tous droits réservés &copy; <span class="underline underline-offset-4">A2CM</span> · 2024</p>
+
+          <div class="flex gap-2">
+            <Button
+              variant="outline"
+              class="gap-2 cursor-pointer"
+              as-child
+            >
+              <NuxtLink
+                to="https://github.com/loicmaes/N2I-Dec2024/tree/master"
+                target="_blank"
+              >
+                <Github />
+                <span>Front-End</span>
+              </NuxtLink>
+            </Button>
+            <Button
+              variant="outline"
+              class="gap-2 cursor-pointer"
+              as-child
+            >
+              <NuxtLink
+                to=""
+                target="_blank"
+              >
+                <Github />
+                <span>Back-End</span>
+              </NuxtLink>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </footer>
   </div>
 </template>
