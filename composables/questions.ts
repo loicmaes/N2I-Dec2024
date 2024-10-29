@@ -10,7 +10,10 @@ import type {
 export const useQuestionConfig = () => useState<IQuestion[]>("questionConfig", () => (JSON.parse(localStorage.getItem("questionConfig") ?? "[]")));
 
 export function loadJson(data: string) {
-  useQuestionConfig().value = JSON.parse(data);
+  const json = JSON.parse(data);
+
+  useQuestionConfig().value = json;
+  localStorage.setItem("questionConfig", JSON.stringify(json));
 }
 
 export function save() {
