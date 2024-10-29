@@ -2,6 +2,7 @@
 import { Plus, Upload } from "@iconoir/vue";
 import QuestionLine from "~/components/composed/QuestionLine.vue";
 import AddQuestionButton from "~/components/composed/AddQuestionButton.vue";
+import InputWrapper from "~/components/templating/InputWrapper.vue";
 
 definePageMeta({
   layout: "admin",
@@ -11,6 +12,7 @@ useHead({
 });
 
 const questions = useQuestionConfig();
+const importData = ref();
 </script>
 
 <template>
@@ -76,13 +78,44 @@ const questions = useQuestionConfig();
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button
-            variant="outline"
-            class="gap-2"
-          >
-            <Upload />
-            <span>Importer un JSON</span>
-          </Button>
+
+          <Dialog>
+            <DialogTrigger>
+              <Button
+                variant="outline"
+                class="gap-2"
+              >
+                <Upload />
+                <span>Importer un JSON</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Import</DialogTitle>
+                <DialogDescription>Importer un JSON existant permet de continuer la modification de quelqu'un d'autre ou de reprendre là où vous en étiez en ayant oublié de sauvegarder dans votre session.</DialogDescription>
+              </DialogHeader>
+
+              <InputWrapper>
+                <Label for="import-json">Donnée</Label>
+                <Textarea
+                  id="import-json"
+                  v-model="importData"
+                  class="min-h-64"
+                  placeholder="Entre le JSON à importer"
+                />
+              </InputWrapper>
+
+              <DialogFooter>
+                <Button
+                  class="gap-2"
+                  @click="loadJson(importData)"
+                >
+                  <Upload />
+                  <span>Importer</span>
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </template>
