@@ -41,4 +41,14 @@ export default [
     content: "J'crois que cette fois j'ai plus de coca que de mousse !",
     time: new Date("Dec, 6 2024 01:08"),
   },
+  {
+    author: 1,
+    content: "Il faut pas qu'on fasse un code propre, il faut qu'on chie dessus, LITERALEMENT !",
+    time: new Date("Dec, 6 2024 03:43"),
+  },
+  {
+    author: 0,
+    content: "J'vais avoir une coulante de code !",
+    time: new Date("Dec, 6 2024 03:44"),
+  },
 ] as Quote[];

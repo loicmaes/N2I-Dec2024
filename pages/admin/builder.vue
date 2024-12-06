@@ -48,31 +48,31 @@ const importData = ref();
             <DropdownMenuContent align="start">
               <DropdownMenuItem
                 class="gap-2"
-                @click="addQuestion('text')"
+                @click="addQuestion('TEXT')"
               >
                 Texte
               </DropdownMenuItem>
               <DropdownMenuItem
                 class="gap-2"
-                @click="addQuestion('image')"
+                @click="addQuestion('IMAGE')"
               >
                 Image
               </DropdownMenuItem>
               <DropdownMenuItem
                 class="gap-2"
-                @click="addQuestion('video')"
+                @click="addQuestion('VIDEO')"
               >
                 Vidéo
               </DropdownMenuItem>
               <DropdownMenuItem
                 class="gap-2"
-                @click="addQuestion('beNearest')"
+                @click="addQuestion('NEAREST')"
               >
                 Juste prix
               </DropdownMenuItem>
               <DropdownMenuItem
                 class="gap-2"
-                @click="addQuestion('fillEmptySpaces')"
+                @click="addQuestion('FILL')"
               >
                 Texte à trous
               </DropdownMenuItem>

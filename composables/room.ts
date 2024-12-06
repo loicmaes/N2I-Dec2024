@@ -2,6 +2,7 @@ import { useLocalStorage } from "@vueuse/core";
 import type { IPlayer } from "~/types/player";
 import type { ICreateRoom, IJoinRoom, IRoom } from "~/types/room";
 import { buildApiUrl } from "~/lib/utils";
+import type { IQuestion } from "~/types/questions";
 
 export const useConnectedPlayers = () => useState<IPlayer[]>("connectedPlayers", () => []);
 export const usePlayer = () => useState<IPlayer | null>("player", () => null);
@@ -15,6 +16,10 @@ export async function useProtectedAccess() {
 
   navigateTo("/game");
 }
+
+export const useRoundEndAt = () => useState<Date | null>("roundEndAt", () => null);
+export const useQuestion = () => useState<IQuestion | null>("question", () => null);
+export const useAnswer = () => useState<number[]>("answer", () => []);
 
 export async function createRoom(payload: ICreateRoom) {
   try {
@@ -71,6 +76,27 @@ export async function joinRoom(payload: IJoinRoom) {
     };
     useConnectedPlayers().value = players;
     usePlayer().value = players[0];
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+export async function startGame() {
+  const token = useLocalStorage("game-token", "").value;
+
+  try {
+    await $fetch(buildApiUrl("/rooms/start"), {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const room = useRoom();
+    room.value = {
+      ...room.value,
+      state: "starting",
+    };
   }
   catch (e) {
     console.error(e);

@@ -1,5 +1,5 @@
-export type EQuestionType = "image" | "video" | "text" | "beNearest" | "fillEmptySpaces";
-export type EDifficulty = "any" | "easy" | "medium" | "hard" | "devil" | "cyber";
+export type EQuestionType = "IMAGE" | "VIDEO" | "TEXT" | "NEAREST" | "FILL";
+export type EDifficulty = "ANY" | "EASY" | "MEDIUM" | "HARD" | "DEVIL" | "CYBER";
 
 export interface IMediaQuestion {
   src: string;
@@ -27,18 +27,18 @@ export interface IQuestion {
 }
 
 export interface IMediaQuestionBuilder extends IQuestion {
-  type: "image" | "video";
+  type: "IMAGE" | "VIDEO";
   specific: IMediaQuestion;
 }
 export interface ITextQuestionBuilder extends IQuestion {
-  type: "text";
+  type: "TEXT";
   specific: ITextQuestion;
 }
 export interface IBeNearestQuestionBuilder extends IQuestion {
-  type: "beNearest";
+  type: "NEAREST";
   specific: IBeNearestQuestion;
 }
 export interface IFillEmptySpacesQuestionBuilder extends IQuestion {
-  type: "fillEmptySpaces";
+  type: "FILL";
   specific: IFillEmptySpacesQuestion;
 }

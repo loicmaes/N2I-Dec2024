@@ -54,7 +54,7 @@ export function addQuestion(type: EQuestionType) {
     id: config.value.length + 1,
     version: 1,
     type,
-    difficulty: "any",
+    difficulty: "ANY",
     question: "",
     specific: buildQuestion(type),
   }];
@@ -76,17 +76,17 @@ export function deleteQuestion(id: number) {
 
 function buildQuestion(type: EQuestionType): IMediaQuestion | ITextQuestion | IBeNearestQuestion | IFillEmptySpacesQuestion {
   switch (type) {
-    case "image": case "video":
+    case "IMAGE": case "VIDEO":
       return {
         src: "",
         candidates: [],
         answer: [],
       } as IMediaQuestion;
-    case "beNearest":
+    case "NEAREST":
       return {
         answer: 0,
       } as IBeNearestQuestion;
-    case "fillEmptySpaces":
+    case "FILL":
       return {
         candidates: [],
         answer: "",
