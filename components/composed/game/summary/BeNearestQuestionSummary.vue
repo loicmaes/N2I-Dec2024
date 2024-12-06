@@ -13,15 +13,15 @@ const question = useQuestion().value as IBeNearestQuestionBuilder;
     >
       <PlayersRecap class="mx-auto" />
     </section>
-    <header>
+    <header class="shrink-0 w-[min(100%,80ch)]">
       <span class="text-sm text-muted-foreground">Soit le plus proche</span>
-      <h1 class="text-3xl font-bold">
+      <h1 class="text-3xl font-bold text-pretty">
         {{ question.question }}
       </h1>
     </header>
     <section
       data-role="candidates"
-      class="grid md:grid-cols-2 gap-4"
+      class="shrink-0 grid gap-4"
     >
       <Button disabled>
         {{ question.specific.answer }}

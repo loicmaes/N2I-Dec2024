@@ -33,7 +33,7 @@ const winner = computed((): IPlayer & {
         </p>
       </header>
 
-      <PlayersRecap />
+      <PlayersRecap class="mx-auto w-full" />
 
       <footer class="flex flex-col items-center gap-3">
         <Button as-child>
