@@ -35,20 +35,23 @@ const question = ref(findQuestion(props.questionId) as IQuestion);
             <SelectValue placeholder="Choisis une difficulté" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="any">
+            <SelectItem value="ANY">
               Toutes difficultés
             </SelectItem>
-            <SelectItem value="easy">
+            <SelectItem value="EASY">
               Facile
             </SelectItem>
-            <SelectItem value="medium">
+            <SelectItem value="MEDIUM">
               Moyen
             </SelectItem>
-            <SelectItem value="hard">
+            <SelectItem value="HARD">
               Difficile
             </SelectItem>
-            <SelectItem value="devil">
+            <SelectItem value="DEVIL">
               Démon
+            </SelectItem>
+            <SelectItem value="CYBER">
+              Cyber
             </SelectItem>
           </SelectContent>
         </Select>
@@ -59,19 +62,19 @@ const question = ref(findQuestion(props.questionId) as IQuestion);
       />
 
       <MediaQuestionOptions
-        v-if="['image', 'video'].includes(question.type)"
+        v-if="['IMAGE', 'VIDEO'].includes(question.type)"
         :question-id="questionId"
       />
       <TextQuestionOptions
-        v-if="question.type === 'text'"
+        v-if="question.type === 'TEXT'"
         :question-id="questionId"
       />
       <BeNearestQuestionOptions
-        v-if="question.type === 'beNearest'"
+        v-if="question.type === 'NEAREST'"
         :question-id="questionId"
       />
       <FillEmptySpacesQuestionOptions
-        v-if="question.type === 'fillEmptySpaces'"
+        v-if="question.type === 'FILL'"
         :question-id="questionId"
       />
     </CardContent>
