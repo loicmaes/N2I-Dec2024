@@ -26,6 +26,7 @@
     "nuxt": "^3.13.2",
     "radix-vue": "^1.9.7",
     "shadcn-nuxt": "^0.10.4",
+    "socket.io-client": "^4.8.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "vee-validate": "^4.14.6",
