@@ -17,10 +17,16 @@ definePageMeta({
   layout: "game",
 });
 
+const loading = ref<boolean>(false);
 const answer = useAnswer();
 const question = useQuestion();
 
-const submit = () => {
+const submitted = useSubmitted();
+
+const submit = async () => {
+  loading.value = true;
+  await submitAnswer();
+  loading.value = false;
 };
 </script>
 
@@ -53,7 +59,8 @@ const submit = () => {
     </template>
 
     <Button
-      :disabled="!answer.length"
+      v-if="!submitted"
+      :disabled="!answer.length || loading"
       class="self-end"
       @click="submit"
     >

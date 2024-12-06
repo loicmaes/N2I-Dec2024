@@ -20,6 +20,8 @@ const answerCount = computed((): number => {
   return parts.filter(p => p.startsWith("{") && p.endsWith("}")).length;
 });
 
+const submitted = useSubmitted();
+
 const choose = (index: number) => {
   if (answer.value.length === answerCount.value)
     return;
@@ -58,7 +60,7 @@ const clear = () => {
           v-for="(candidate, index) in question.specific.candidates"
           :key="`candidate-${index}`"
           :variant="answer.includes(index) ? 'secondary' : 'outline'"
-          :disabled="answer.includes(index)"
+          :disabled="answer.includes(index) || submitted"
           @click="choose(index)"
         >
           {{ candidate }}
@@ -71,6 +73,7 @@ const clear = () => {
         <Button
           size="icon"
           variant="outline"
+          :disabled="submitted"
           @click="clear"
         >
           <Trash />

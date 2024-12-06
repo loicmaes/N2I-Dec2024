@@ -6,6 +6,8 @@ defineProps<{
 }>();
 const answer = useAnswer();
 
+const submitted = useSubmitted();
+
 const updateValue = (value?: number) => {
   answer.value = [value ?? 0];
 };
@@ -25,7 +27,7 @@ const updateValue = (value?: number) => {
       />
     </section>
     <header>
-      <span class="text-sm text-muted-foreground">Sois le plus proche</span>
+      <span class="text-sm text-muted-foreground">Soit le plus proche</span>
       <h1 class="text-3xl font-bold">
         {{ question.question }}
       </h1>
@@ -37,6 +39,7 @@ const updateValue = (value?: number) => {
       <NumberField
         :min="0"
         :model-value="answer[0]"
+        :disabled="submitted"
         @update:model-value="updateValue"
       >
         <NumberFieldContent>

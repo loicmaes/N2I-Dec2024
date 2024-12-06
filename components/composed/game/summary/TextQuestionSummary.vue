@@ -1,28 +1,18 @@
 <script setup lang="ts">
 import type { ITextQuestionBuilder } from "~/types/questions";
+import PlayersRecap from "~/components/composed/game/summary/PlayersRecap.vue";
 
-const answer = useAnswer();
-
-const props = defineProps<{
-  question: ITextQuestionBuilder;
-}>();
-
-const submitted = useSubmitted();
-
-const choose = (index: number) => {
-  if (answer.value.includes(index))
-    answer.value = answer.value.filter(e => e !== index);
-  else if (answer.value.length < props.question.specific.candidates.length - 1)
-    answer.value = [...answer.value, index];
-};
+const question = useQuestion().value as ITextQuestionBuilder;
 </script>
 
 <template>
   <div class="flex flex-col gap-6">
     <section
       data-role="head"
-      class="flex-1"
-    />
+      class="flex-1 grid place-items-center"
+    >
+      <PlayersRecap class="mx-auto" />
+    </section>
     <header>
       <span class="text-sm text-muted-foreground">Réponds à la question</span>
       <h1 class="text-3xl font-bold">
@@ -36,9 +26,8 @@ const choose = (index: number) => {
       <Button
         v-for="(candidate, index) in question.specific.candidates"
         :key="`candidate-${index}`"
-        :variant="answer.includes(index) ? 'secondary' : 'outline'"
-        :disabled="submitted"
-        @click="choose(index)"
+        :variant="question.specific.answer.includes(index) ? 'default' : 'outline'"
+        :disabled="true"
       >
         {{ candidate }}
       </Button>
