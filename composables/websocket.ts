@@ -50,7 +50,22 @@ export function connectWebsocket() {
     };
   });
 
+  socket.on("onGameStart", ({ endAt }: { endAt: string }) => {
+    useRoundEndAt().value = new Date(endAt);
+
+    useInterval().value = setInterval(() => {
+      const now = new Date().getTime();
+      const endTime = useRoundEndAt().value?.getTime() ?? 0;
+      const secondsPassed = Math.max(0, Math.floor((endTime - now) / 1000)); // Conversion en secondes
+      useRemainingTime().value = `${secondsPassed < 10 ? "0" : ""}${secondsPassed}`;
+    }, 1000);
+  });
+
   socket.on("onRoundStart", ({ question, endAt }: QuestionDataResponse) => {
+    const interval = useInterval();
+    clearInterval(interval.value);
+    interval.value = null;
+
     useAnswer().value = [];
     useSubmitted().value = false;
 
@@ -63,10 +78,21 @@ export function connectWebsocket() {
       state: "playingRound",
     };
 
+    useInterval().value = setInterval(() => {
+      const now = new Date().getTime();
+      const endTime = useRoundEndAt().value?.getTime() ?? 0;
+      const secondsPassed = Math.max(0, Math.floor((endTime - now) / 1000)); // Conversion en secondes
+      useRemainingTime().value = `${secondsPassed < 10 ? "0" : ""}${secondsPassed}`;
+    }, 1000);
+
     navigateTo(`/game/${room.value.code}/challenge`);
   });
 
   socket.on("onRoundSummary", ({ players, question, endAt }: SummaryDataResponse) => {
+    const interval = useInterval();
+    clearInterval(interval.value);
+    interval.value = null;
+
     useConnectedPlayers().value = players;
     useQuestion().value = question;
     useRoundEndAt().value = new Date(endAt);
@@ -75,6 +101,10 @@ export function connectWebsocket() {
   });
 
   socket.on("onRoomEnd", ({ room, players }: GameEndDataResponse) => {
+    const interval = useInterval();
+    clearInterval(interval.value);
+    interval.value = null;
+
     useConnectedPlayers().value = players;
 
     const usedRoom = useRoom();

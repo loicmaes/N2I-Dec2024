@@ -20,7 +20,7 @@ export async function useProtectedAccess() {
   navigateTo("/game");
 }
 
-export const useRoundEndAt = () => useState<Date | null>("roundEndAt", () => null);
+export const useRoundEndAt = () => useState<Date>("roundEndAt", () => new Date());
 export const useQuestion = () => useState<IQuestion | null>("question", () => null);
 export const useAnswer = () => useState<number[]>("answer", () => []);
 export const useSubmitted = () => useState<boolean>("submitted", () => false);
@@ -157,3 +157,7 @@ function buildBody() {
       };
   }
 }
+
+export const useRemainingTime = () => useState<string>("remainingTime", () => "0:00");
+// eslint-disable-next-line
+export const useInterval = () => useState<any>("interval", () => null);

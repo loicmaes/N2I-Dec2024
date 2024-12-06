@@ -97,7 +97,7 @@ async function requestStartQuiz() {
         v-if="room.state === 'starting'"
         class="text-center font-medium"
       >
-        Lancement de la partie...
+        Lancement de la partie ({{ useRemainingTime() }})...
       </p>
     </div>
   </div>
