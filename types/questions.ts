@@ -1,5 +1,5 @@
 export type EQuestionType = "image" | "video" | "text" | "beNearest" | "fillEmptySpaces";
-export type EDifficulty = "any" | "easy" | "medium" | "hard" | "devil";
+export type EDifficulty = "any" | "easy" | "medium" | "hard" | "devil" | "cyber";
 
 export interface IMediaQuestion {
   src: string;
