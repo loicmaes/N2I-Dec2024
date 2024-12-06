@@ -13,6 +13,21 @@ type QuestionDataResponse = {
   question: IQuestion;
   endAt: string;
 };
+type SummaryDataResponse = {
+  players: (IPlayer & {
+    score: number;
+    roomCode: string;
+  })[];
+  question: IQuestion;
+  endAt: string;
+};
+type GameEndDataResponse = {
+  room: IRoom;
+  players: (IPlayer & {
+    score: number;
+    roomCode: string;
+  })[];
+};
 
 export function connectWebsocket() {
   const token = useLocalStorage("game-token", "").value;
@@ -37,6 +52,7 @@ export function connectWebsocket() {
 
   socket.on("onRoundStart", ({ question, endAt }: QuestionDataResponse) => {
     useAnswer().value = [];
+    useSubmitted().value = false;
 
     useQuestion().value = question;
     useRoundEndAt().value = new Date(endAt);
@@ -48,5 +64,25 @@ export function connectWebsocket() {
     };
 
     navigateTo(`/game/${room.value.code}/challenge`);
+  });
+
+  socket.on("onRoundSummary", ({ players, question, endAt }: SummaryDataResponse) => {
+    useConnectedPlayers().value = players;
+    useQuestion().value = question;
+    useRoundEndAt().value = new Date(endAt);
+
+    navigateTo(`/game/${useRoom().value?.code}/summary`);
+  });
+
+  socket.on("onRoomEnd", ({ room, players }: GameEndDataResponse) => {
+    useConnectedPlayers().value = players;
+
+    const usedRoom = useRoom();
+    usedRoom.value = {
+      ...room,
+      state: "ending",
+    };
+
+    navigateTo(`/game/${usedRoom.value.code}/overview`);
   });
 }

@@ -2,9 +2,12 @@ import { useLocalStorage } from "@vueuse/core";
 import type { IPlayer } from "~/types/player";
 import type { ICreateRoom, IJoinRoom, IRoom } from "~/types/room";
 import { buildApiUrl } from "~/lib/utils";
-import type { IQuestion } from "~/types/questions";
+import type { IFillEmptySpacesQuestionBuilder, IQuestion } from "~/types/questions";
 
-export const useConnectedPlayers = () => useState<IPlayer[]>("connectedPlayers", () => []);
+export const useConnectedPlayers = () => useState<(IPlayer & {
+  score?: number;
+  roomCode?: string;
+})[]>("connectedPlayers", () => []);
 export const usePlayer = () => useState<IPlayer | null>("player", () => null);
 export const useRoom = () => useState<IRoom | null>("room", () => null);
 export async function useProtectedAccess() {
@@ -20,6 +23,7 @@ export async function useProtectedAccess() {
 export const useRoundEndAt = () => useState<Date | null>("roundEndAt", () => null);
 export const useQuestion = () => useState<IQuestion | null>("question", () => null);
 export const useAnswer = () => useState<number[]>("answer", () => []);
+export const useSubmitted = () => useState<boolean>("submitted", () => false);
 
 export async function createRoom(payload: ICreateRoom) {
   try {
@@ -93,6 +97,7 @@ export async function startGame() {
       },
     });
     const room = useRoom();
+    if (!room.value) return;
     room.value = {
       ...room.value,
       state: "starting",
@@ -100,5 +105,55 @@ export async function startGame() {
   }
   catch (e) {
     console.error(e);
+  }
+}
+export async function submitAnswer() {
+  const token = useLocalStorage("game-token", "").value;
+
+  try {
+    await $fetch(buildApiUrl("/questions/submit"), {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: buildBody(),
+    });
+    useSubmitted().value = true;
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
+function buildBody() {
+  const question = useQuestion().value;
+  const answer = useAnswer().value;
+
+  if (!question || !answer)
+    return {};
+
+  switch (question.type) {
+    case "TEXT": case "IMAGE":
+      return {
+        answer: answer,
+      };
+    case "NEAREST":
+      return {
+        answer: Number(answer[0]),
+      };
+    case "FILL":
+      return {
+        answer: question.question
+          .split(" ")
+          .map(p =>
+            p.startsWith("{") && p.endsWith("}")
+              ? (question as IFillEmptySpacesQuestionBuilder).specific.candidates[answer[Number(p.substring(1, p.length - 1))]]
+              : p)
+          .join(" "),
+      };
+    default:
+      return {
+        answer: [],
+      };
   }
 }

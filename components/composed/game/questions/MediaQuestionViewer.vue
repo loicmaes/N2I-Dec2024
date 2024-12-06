@@ -6,6 +6,8 @@ const props = defineProps<{
 }>();
 const answer = useAnswer();
 
+const submitted = useSubmitted();
+
 const choose = (index: number) => {
   if (answer.value.includes(index))
     answer.value = answer.value.filter(e => e !== index);
@@ -53,6 +55,7 @@ const choose = (index: number) => {
         v-for="(candidate, index) in question.specific.candidates"
         :key="`candidate-${index}`"
         :variant="answer.includes(index) ? 'secondary' : 'outline'"
+        :disabled="submitted"
         @click="choose(index)"
       >
         {{ candidate }}
