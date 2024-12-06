@@ -1,32 +1,48 @@
+import { useLocalStorage } from "@vueuse/core";
 import type { IPlayer } from "~/types/player";
-import type { IRoom } from "~/types/room";
+import type { ICreateRoom, IRoom } from "~/types/room";
+import { buildApiUrl } from "~/lib/utils";
 
 export const useConnectedPlayers = () => useState<IPlayer[]>("connectedPlayers", () => []);
 export const usePlayer = () => useState<IPlayer | null>("player", () => null);
 export const useRoom = () => useState<IRoom | null>("room", () => null);
+export async function useProtectedAccess() {
+  const player = usePlayer().value;
+  const room = useRoom().value;
 
-// TODO: fire
-export const useFakeConnectedPlayers = () => useState<IPlayer[]>("connectedPlayers", () => [
-  /* {
-    id: 1,
-    name: "Patrick",
-    owner: false,
-  }, */
-  {
-    id: 2,
-    name: "Moi",
-    owner: true,
-  },
-]);
-export const useFakePlayer = () => useState<IPlayer>("player", () => ({
-  id: 2,
-  name: "Moi",
-  owner: true,
-}));
-export const useFakeRoom = () => useState<IRoom>("room", () => ({
-  code: "EDFEDC",
-  name: "My Room",
-  questionCount: 1,
-  maxPlayerCount: 3,
-  difficulty: "easy",
-}));
+  if (player && room)
+    return;
+
+  navigateTo("/game");
+}
+
+export async function createRoom(payload: ICreateRoom) {
+  try {
+    const { token } = await $fetch<{ token: string }>(buildApiUrl("/rooms/create"), {
+      method: "POST",
+      body: {
+        ...payload,
+        difficulty: payload.difficulty.toUpperCase(),
+      },
+    });
+    useLocalStorage("game-token", "").value = token;
+
+    const { players, room } = await $fetch<{
+      players: IPlayer[];
+      room: IRoom;
+    }>(buildApiUrl("/rooms/current"), {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    useRoom().value = {
+      ...room,
+      state: "idle",
+    };
+    useConnectedPlayers().value = players;
+    usePlayer().value = players[0];
+  }
+  catch (e) {
+    console.error(e);
+  }
+}

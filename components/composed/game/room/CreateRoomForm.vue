@@ -3,12 +3,15 @@ import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
 import { useForm } from "vee-validate";
 import { generateArray } from "~/lib/utils";
+import type { ICreateRoom } from "~/types/room";
+
+const loading = ref<boolean>(false);
 
 const schema = toTypedSchema(z.object({
   roomName: z.string().min(3).max(255),
   difficulty: z.string().default("any"),
-  maxPlayers: z.number().min(2).max(10),
-  questionCount: z.number().min(1).max(20),
+  maxPlayers: z.string(),
+  questionCount: z.string(),
   playerName: z.string().min(3).max(30),
 }));
 const { handleSubmit } = useForm({
@@ -18,7 +21,12 @@ const { handleSubmit } = useForm({
   },
 });
 const submit = handleSubmit(async (values) => {
-  console.table(values);
+  loading.value = true;
+  await createRoom(values as unknown as ICreateRoom);
+  setTimeout(async () => {
+    await navigateTo(`/game/${useRoom().value?.code}`);
+    loading.value = false;
+  }, 20);
 });
 </script>
 
@@ -137,8 +145,16 @@ const submit = handleSubmit(async (values) => {
       </FormItem>
     </FormField>
 
-    <Button type="submit">
-      Créer la salle
+    <Button
+      type="submit"
+      :disabled="loading"
+    >
+      <template v-if="loading">
+        Création...
+      </template>
+      <template v-else>
+        Créer la salle
+      </template>
     </Button>
   </form>
 </template>
