@@ -22,6 +22,7 @@ const answer = useAnswer();
 const question = useQuestion();
 
 const submitted = useSubmitted();
+const remainingTime = useRemainingTime();
 
 const submit = async () => {
   loading.value = true;
@@ -35,6 +36,10 @@ const submit = async () => {
     data-page="game-challenge"
     class="flex flex-col gap-8 p-6 min-h-dvh"
   >
+    <p class="absolute top-6 right-6 font-medium text-muted-foreground text-lg">
+      0:{{ remainingTime }}
+    </p>
+
     <template v-if="question">
       <TextQuestionViewer
         v-if="question.type === 'TEXT'"

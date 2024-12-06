@@ -3,6 +3,10 @@ import type { IFillEmptySpacesQuestionBuilder } from "~/types/questions";
 import PlayersRecap from "~/components/composed/game/summary/PlayersRecap.vue";
 
 const question = useQuestion().value as IFillEmptySpacesQuestionBuilder;
+const questionDisplay = computed((): string => {
+  const parts = question.question.split(" ");
+  return parts.map(p => p.startsWith("{") && p.endsWith("}") ? "_____" : p).join(" ");
+});
 </script>
 
 <template>
@@ -13,19 +17,17 @@ const question = useQuestion().value as IFillEmptySpacesQuestionBuilder;
     >
       <PlayersRecap class="mx-auto" />
     </section>
-    <header>
+    <header class="shrink-0 w-[min(100%,80ch)]">
       <span class="text-sm text-muted-foreground">Complète la phrase</span>
-      <h1 class="text-3xl font-bold">
-        {{ question.question }}
+      <h1 class="text-3xl font-bold text-pretty">
+        {{ questionDisplay }}
       </h1>
     </header>
     <section
       data-role="candidates"
-      class="grid md:grid-cols-2 gap-4"
+      class="shrink-0 grid gap-4"
     >
-      <Button disabled>
-        {{ question.specific.answer }}
-      </Button>
+      <Button>{{ question.specific.answer }}</Button>
     </section>
   </div>
 </template>
