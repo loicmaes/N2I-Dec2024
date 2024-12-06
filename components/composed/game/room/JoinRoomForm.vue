@@ -2,16 +2,22 @@
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
 import { useForm } from "vee-validate";
+import type { IJoinRoom } from "~/types/room";
+
+const loading = ref<boolean>(false);
 
 const schema = toTypedSchema(z.object({
   playerName: z.string().min(3).max(30),
-  code: z.string().regex(/^[A-Z0-9]{6}$/g),
+  roomCode: z.string().regex(/^[A-Z0-9]{6}$/g),
 }));
 const { handleSubmit } = useForm({
   validationSchema: schema,
 });
 const submit = handleSubmit(async (values) => {
-  console.table(values);
+  loading.value = true;
+  await joinRoom(values as unknown as IJoinRoom);
+  await navigateTo(`/game/${useRoom().value?.code}`);
+  loading.value = false;
 });
 </script>
 
@@ -22,7 +28,7 @@ const submit = handleSubmit(async (values) => {
   >
     <FormField
       v-slot="{ componentField }"
-      name="code"
+      name="roomCode"
     >
       <FormItem>
         <FormLabel>Code</FormLabel>
@@ -44,8 +50,16 @@ const submit = handleSubmit(async (values) => {
       </FormItem>
     </FormField>
 
-    <Button type="submit">
-      Rejoindre la salle
+    <Button
+      type="submit"
+      :disabled="loading"
+    >
+      <template v-if="loading">
+        Connexion...
+      </template>
+      <template v-else>
+        Rejoindre la salle
+      </template>
     </Button>
   </form>
 </template>

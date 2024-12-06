@@ -23,10 +23,8 @@ const { handleSubmit } = useForm({
 const submit = handleSubmit(async (values) => {
   loading.value = true;
   await createRoom(values as unknown as ICreateRoom);
-  setTimeout(async () => {
-    await navigateTo(`/game/${useRoom().value?.code}`);
-    loading.value = false;
-  }, 20);
+  await navigateTo(`/game/${useRoom().value?.code}`);
+  loading.value = false;
 });
 </script>
 

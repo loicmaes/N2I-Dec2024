@@ -18,3 +18,7 @@ export interface ICreateRoom {
   maxPlayers: number;
   questionCount: number;
 }
+export interface IJoinRoom {
+  roomCode: string;
+  playerName: string;
+}
